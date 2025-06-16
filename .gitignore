@@ -1,3 +1,7 @@
 **/venv/
 **/venv/*
 Particle Swarm Optimization/output-gifs.zip
+__pycache__/
+*/__pycache__/
+**/__pycache__/
+*/__pycache__/*
