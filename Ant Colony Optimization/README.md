@@ -38,9 +38,9 @@ The following images are from [AntSimulator](https://github.com/CS-Astronaut/Ant
 
 | AntSimulator |
 |----------------------------|
-| ![AntSimulator Screenshot 1|500](./CS-Astronaut.AntSimulator/AntSimScr1.png) |
-| ![AntSimulator Screenshot 2|500](./CS-Astronaut.AntSimulator/AntSimScr2.png) |
-| ![AntSimulator Screenshot 3|500](./CS-Astronaut.AntSimulator/AntSimScr3.png) |
+| ![AntSimulator Screenshot 1](./CS-Astronaut.AntSimulator/AntSimScr1.png) |
+| ![AntSimulator Screenshot 2](./CS-Astronaut.AntSimulator/AntSimScr2.png) |
+| ![AntSimulator Screenshot 3](./CS-Astronaut.AntSimulator/AntSimScr3.png) |
 ## Further Reading
 
 For more detailed information about ACO, you can refer to the following resources:
