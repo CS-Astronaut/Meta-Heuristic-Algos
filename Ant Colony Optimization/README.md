@@ -6,7 +6,7 @@ Ant Colony Optimization (ACO) is a meta-heuristic algorithm inspired by the fora
 
 In nature, ants initially explore randomly. When food is found, they return to the colony, laying down pheromone trails. Other ants are more likely to follow stronger pheromone trails, reinforcing successful paths. This collective behavior leads to the discovery of shortest paths between the nest and food sources.
 
-![Ants following pheromone trails](./src/ants.jpg)
+![Ants following pheromone trails|500](./src/ants.jpg)
 
 ## Algorithm Mechanics
 
@@ -38,10 +38,9 @@ The following images are from [AntSimulator](https://github.com/CS-Astronaut/Ant
 
 | AntSimulator |
 |----------------------------|
-| ![AntSimulator Screenshot 1](./CS-Astronaut.AntSimulator/AntSimScr1.png) |
-| ![AntSimulator Screenshot 2](./CS-Astronau.AntSimulator/AntSimScr2.png) |
-| ![AntSimulator Screenshot 3](./CS-Astronaut.AntSimulator/AntSimScr3.png) |
-
+| ![AntSimulator Screenshot 1|500](./CS-Astronaut.AntSimulator/AntSimScr1.png) |
+| ![AntSimulator Screenshot 2|500](./CS-Astronaut.AntSimulator/AntSimScr2.png) |
+| ![AntSimulator Screenshot 3|500](./CS-Astronaut.AntSimulator/AntSimScr3.png) |
 ## Further Reading
 
 For more detailed information about ACO, you can refer to the following resources:
