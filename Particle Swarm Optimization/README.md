@@ -4,13 +4,13 @@
 
 Particle Swarm Optimization (PSO) is a fascinating computational method used to solve optimization problems. Imagine you are trying to find the lowest point in a valley while blindfolded. You are with a group of friends, and each of you is searching. At each step, you not only move based on your own best location found so far but also get a hint from the friend who has found the overall best location in the group.
 
+<table>
+  <tr>
+    <td><img src="./src/School_of_Fish.jpg" width="250" height="180"></td>
+    <td><img src="./src/Flock_of_Birds.png" width="250" height="180"></td>
+  </tr>
+</table>
 
-<tabel> 
-    <tr> 
-        <td><img src="./src/School_of_Fish.jpg" width="250" height="180"> </td>
-        <td><img src="./src/Flock_of_Birds.png" width="250" height="180"> </td>
-    </tr>
-</tabel> 
 
 This is the core idea behind PSO. It's a population-based technique where a 'swarm' of potential solutions (called 'particles') explore the search space. Each particle's movement is influenced by its best-known position (personal best, `pbest`) and the best position known by the entire swarm (global best, `gbest`).
 
@@ -36,10 +36,10 @@ The following table shows the optimization process of the PSO algorithm on vario
 
 | Function                        | Function Contour and PSO Animation                      |
 |---------------------------------|---------------------------------------------------------|
-| **Simple Quadratic Function**   | <table><tr><td><img src="./PSO_simple_quadratic_function.gif" width="250"></td><td><img src="./Functions/simple_quadratic.gif" width="250"></td></tr></table> |
-| **Rastrigin Function**          | <table><tr><td><img src="./PSO_rastrigin_function.gif" width="250"></td><td><img src="./Functions/rastrigin.gif" width="250"></td></tr></table>             |
-| **Ackley Function**             | <table><tr><td><img src="./PSO_ackley_function.gif" width="250"></td><td><img src="./Functions/ackley.gif" width="250"></td></tr></table>                 |
-| **Himmelblau Function**         | <table><tr><td><img src="./PSO_himmelblau_function.gif" width="250"></td><td><img src="./Functions/himmelblau.gif" width="250"></td></tr></table>             |
+| **Simple Quadratic Function**   | <table><tr><td><img src="./Algorithm/results/PSO_simple_quadratic_function.gif" width="250"></td><td><img src="./Functions/simple_quadratic.gif" width="250"></td></tr></table> |
+| **Rastrigin Function**          | <table><tr><td><img src="./Algorithm/results/PSO_rastrigin_function.gif" width="250"></td><td><img src="./Functions/rastrigin.gif" width="250"></td></tr></table>             |
+| **Ackley Function**             | <table><tr><td><img src="./Algorithm/results/PSO_ackley_function.gif" width="250"></td><td><img src="./Functions/ackley.gif" width="250"></td></tr></table>                 |
+| **Himmelblau Function**         | <table><tr><td><img src="./Algorithm/results/PSO_himmelblau_function.gif" width="250"></td><td><img src="./Functions/himmelblau.gif" width="250"></td></tr></table>             |
 
 *Note: The 'Function Contour' image on the left uses the same animation GIF as the 'PSO Animation' on the right for illustration purposes, as separate static contour plots were not provided. The animations themselves show the contour lines.*
 
