@@ -1,4 +1,4 @@
-# Genetic Algorithm (GA) — Comprehensive Benchmarking Results
+# Genetic Algorithm (GA) Benchmarking Results
 
 This project implements a **real-coded Genetic Algorithm (GA)** and evaluates its performance on a comprehensive suite of 69 standard benchmark functions spanning dimensions from 1D to 30D. The results demonstrate GA's robustness across diverse optimization landscapes with emphasis on exploration capabilities.
 
