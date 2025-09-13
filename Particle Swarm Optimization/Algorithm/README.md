@@ -1,4 +1,4 @@
-# Particle Swarm Optimization (PSO) — Comprehensive Benchmarking Results
+# Particle Swarm Optimization (PSO) Benchmarking Results
 
 This project implements **Particle Swarm Optimization (PSO)** and evaluates its performance on a comprehensive suite of 69 standard benchmark functions spanning dimensions from 1D to 30D. The results demonstrate PSO's effectiveness across diverse optimization landscapes.
 
@@ -134,5 +134,3 @@ Results include:
 - `best_observed_val`: Single best result achieved across all runs
 - `best_observed_x`: Parameter values achieving the best result
 - `known_min`: Theoretical global minimum (where known)
-
-This comprehensive evaluation establishes PSO as a highly effective optimization algorithm, particularly excelling on unimodal and moderately multimodal functions while maintaining consistent performance across diverse problem characteristics.
