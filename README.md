@@ -13,7 +13,7 @@ Mimics how ants deposit and follow pheromone trails to collectively discover sho
 
 ![](assets/aco.jpg)
 
-## Particle Swarm Optimization (PSO):
+## [Particle Swarm Optimization (PSO)](https://github.com/CS-Astronaut/Meta-Heuristic-Algos/tree/main/Particle%20Swarm%20Optimization):
 Models the social behavior of birds flocking or fish schooling, where particles share information to converge on optimal solutions.
 
 ![](assets/pso.jpg)
