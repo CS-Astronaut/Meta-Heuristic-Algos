@@ -36,10 +36,10 @@ The following table shows the optimization process of the PSO algorithm on vario
 
 | Function                        | Function Contour and PSO Animation                      |
 |---------------------------------|---------------------------------------------------------|
-| **Simple Quadratic Function**   | <table><tr><td><img src="./Algorithm/results/PSO_simple_quadratic_function.gif" width="250"></td><td><img src="./Functions/simple_quadratic.gif" width="250"></td></tr></table> |
-| **Rastrigin Function**          | <table><tr><td><img src="./Algorithm/results/PSO_rastrigin_function.gif" width="250"></td><td><img src="./Functions/rastrigin.gif" width="250"></td></tr></table>             |
-| **Ackley Function**             | <table><tr><td><img src="./Algorithm/results/PSO_ackley_function.gif" width="250"></td><td><img src="./Functions/ackley.gif" width="250"></td></tr></table>                 |
-| **Himmelblau Function**         | <table><tr><td><img src="./Algorithm/results/PSO_himmelblau_function.gif" width="250"></td><td><img src="./Functions/himmelblau.gif" width="250"></td></tr></table>             |
+| **Simple Quadratic Function**   | <table><tr><td><img src="./Visuals/results/PSO_simple_quadratic_function.gif" width="250"></td><td><img src="./Visuals/Functions/simple_quadratic.gif" width="250"></td></tr></table> |
+| **Rastrigin Function**          | <table><tr><td><img src="./Visuals/results/PSO_rastrigin_function.gif" width="250"></td><td><img src="./Visuals/Functions/rastrigin.gif" width="250"></td></tr></table>             |
+| **Ackley Function**             | <table><tr><td><img src="./Visuals/results/PSO_ackley_function.gif" width="250"></td><td><img src="./Visuals/Functions/ackley.gif" width="250"></td></tr></table>                 |
+| **Himmelblau Function**         | <table><tr><td><img src="./Visuals/results/PSO_himmelblau_function.gif" width="250"></td><td><img src="./Visuals/Functions/himmelblau.gif" width="250"></td></tr></table>             |
 
 *Note: The 'Function Contour' image on the left uses the same animation GIF as the 'PSO Animation' on the right for illustration purposes, as separate static contour plots were not provided. The animations themselves show the contour lines.*
 

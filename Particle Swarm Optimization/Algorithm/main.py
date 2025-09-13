@@ -1,202 +1,147 @@
 import numpy as np
-import matplotlib.pyplot as plt
-from matplotlib.animation import FuncAnimation
+import pandas as pd
+from benchfunc import funcs_vec
+from IPython.display import display
 
-# Select the objective function (1 to 4)
-function_number = 4
+# ----------------------------
+# PSO Parameters
+# ----------------------------
+POP_SIZE = 50
+MAX_EVALS = 40000
+MAX_ITERS = MAX_EVALS // POP_SIZE  # 800 iterations
+C1 = 1.42
+C2 = 1.42
+W = 0.74
+N_RUNS = 20
 
+rng_global = np.random.default_rng()
 
-# Define objective functions
-def function1(x, y):
-    """Simple quadratic function with sinusoidal components"""
-    return (x - 3.14)**2 + (y - 2.72)**2 + np.sin(3*x + 1.41) + np.sin(4*y - 1.73)
+# ----------------------------
+# PSO Algorithm
+# ----------------------------
+def run_pso(func_vec, lower, upper, seed=None):
+    rng = np.random.default_rng(seed)
+    dim = int(lower.shape[0])  # Handle numpy array shape
 
-def function2(x, y):
-    """Rastrigin Function"""
-    return 20 + x**2 - 10*np.cos(2*np.pi*x) + y**2 - 10*np.cos(2*np.pi*y)
+    # init positions and velocities
+    pos = rng.uniform(lower, upper, size=(POP_SIZE, dim))
+    vel = rng.uniform(-abs(upper-lower), abs(upper-lower), size=(POP_SIZE, dim)) * 0.1
 
-def function3(x, y):
-    """Ackley Function"""
-    return -20 * np.exp(-0.2 * np.sqrt(0.5 * (x**2 + y**2))) \
-           - np.exp(0.5 * (np.cos(2*np.pi*x) + np.cos(2*np.pi*y))) + np.e + 20
+    # evaluate initial fitness
+    fitnesses = func_vec(pos)
+    evals = POP_SIZE
 
-def function4(x, y):
-    """Himmelblau Function"""
-    return (x**2 + y - 11)**2 + (x + y**2 - 7)**2
+    # personal bests
+    pbest_pos = pos.copy()
+    pbest_val = fitnesses.copy()
 
-# Function-specific domain ranges
-function_ranges = {
-    1: (0, 5),
-    2: (-5.12, 5.12),
-    3: (-5, 5),
-    4: (-6, 6)
-}
+    # global best
+    g_idx = int(np.argmin(pbest_val))
+    gbest_pos = pbest_pos[g_idx].copy()
+    gbest_val = float(pbest_val[g_idx])
 
-# Choose the function and its range
-if function_number == 1:
-    f = function1
-elif function_number == 2:
-    f = function2
-elif function_number == 3:
-    f = function3
-elif function_number == 4:
-    f = function4
-else:
-    raise ValueError("Function number must be between 1 and 4")
+    # iterations
+    for it in range(MAX_ITERS):
+        # velocity update
+        r1 = rng.random(size=(POP_SIZE, dim))
+        r2 = rng.random(size=(POP_SIZE, dim))
+        vel = (W*vel 
+               + C1*r1*(pbest_pos - pos) 
+               + C2*r2*(gbest_pos - pos))
 
-# Get range for plotting and swarm initialization
-x_min_range, x_max_range = function_ranges[function_number]
-y_min_range, y_max_range = function_ranges[function_number]
+        # position update
+        pos = pos + vel
+        pos = np.clip(pos, lower, upper)
 
-# Generate function values over grid
-x, y = np.meshgrid(np.linspace(x_min_range, x_max_range, 100), 
-                   np.linspace(y_min_range, y_max_range, 100))
-z = f(x, y)
+        # evaluate
+        fitnesses = func_vec(pos)
+        evals += POP_SIZE
 
-# Find approximate global minimum in grid
-x_min = x.ravel()[z.argmin()]
-y_min = y.ravel()[z.argmin()]
+        # update personal best
+        better_mask = fitnesses < pbest_val
+        pbest_pos[better_mask] = pos[better_mask]
+        pbest_val[better_mask] = fitnesses[better_mask]
 
-# PSO hyperparameters (customized for each function)
-if function_number == 1:
-    c1 = c2 = 2.5  # Further increased for stronger attraction
-    w = 0.3        # Further reduced for better convergence
-    n_particles = 100  # Significantly more particles
-    max_velocity = 0.1  # Tighter velocity control
-elif function_number == 2:
-    c1 = c2 = 1.49445
-    w = 0.729
-    n_particles = 30
-elif function_number == 3:
-    c1 = c2 = 1.5
-    w = 0.7
-    n_particles = 40
-else:
-    c1 = c2 = 1.2
-    w = 0.6
-    n_particles = 25
+        # update global best
+        min_idx = int(np.argmin(pbest_val))
+        if pbest_val[min_idx] < gbest_val:
+            gbest_val = float(pbest_val[min_idx])
+            gbest_pos = pbest_pos[min_idx].copy()
 
-# Initialize particles and velocities
-np.random.seed(100)
-X = np.random.uniform(x_min_range, x_max_range, (2, n_particles))
-V = np.random.randn(2, n_particles) * 0.1
+        if evals >= MAX_EVALS:
+            break
 
-# Initialize personal and global bests
-pbest = X.copy()
-pbest_obj = f(X[0], X[1])
-gbest = pbest[:, pbest_obj.argmin()]
-gbest_obj = pbest_obj.min()
+    return gbest_val, gbest_pos
 
-def update():
-    """Run one iteration of PSO"""
-    global V, X, pbest, pbest_obj, gbest, gbest_obj
+# ----------------------------
+# Run Experiments
+# ----------------------------
+summary_rows = []
+all_results = []
+print("Starting PSO runs...")
+
+for name, fvec, lower, upper, known in funcs_vec:
+    best_vals = np.empty(N_RUNS)
+    best_xs = []
     
-    r1, r2 = np.random.rand(2)
+    for i in range(N_RUNS):
+        seed = rng_global.integers(1_000_000_000)
+        try:
+            bv, bx = run_pso(fvec, lower, upper, seed=seed)
+        except Exception as e:
+            print(f"  Skipping run due to error evaluating {name}: {e}")
+            bv, bx = np.nan, None
+        best_vals[i] = bv
+        best_xs.append(bx)
     
-    # Update velocities with stronger clamping
-    V = w * V + c1 * r1 * (pbest - X) + c2 * r2 * (gbest.reshape(-1, 1) - X)
-    if function_number == 1:
-        V = np.clip(V, -max_velocity, max_velocity)
+    # Handle case where all runs failed
+    valid_vals = best_vals[~np.isnan(best_vals)]
+    if len(valid_vals) > 0:
+        meanv = float(np.nanmean(best_vals))
+        stdv = float(np.nanstd(best_vals, ddof=1)) if len(valid_vals) > 1 else 0.0
+        idx_best = int(np.nanargmin(best_vals))
+        best_observed_val = float(best_vals[idx_best])
+        best_observed_x = np.round(best_xs[idx_best], 6).tolist() if best_xs[idx_best] is not None else None
     else:
-        V_max = 0.1 * (x_max_range - x_min_range)
-        V = np.clip(V, -V_max, V_max)
+        meanv = np.nan
+        stdv = np.nan
+        best_observed_val = np.nan
+        best_observed_x = None
     
-    # Update positions
-    X = X + V
-    X[0] = np.clip(X[0], x_min_range, x_max_range)
-    X[1] = np.clip(X[1], y_min_range, y_max_range)
+    summary_rows.append({
+        "function": name,
+        "mean_best": round(meanv, 6) if not np.isnan(meanv) else np.nan,
+        "std_best": round(stdv, 6) if not np.isnan(stdv) else np.nan,
+        "best_observed_val": best_observed_val,
+        "best_observed_x": best_observed_x,
+        "known_min": known
+    })
     
-    # Evaluate new positions
-    obj = f(X[0], X[1])
+    all_results.append({"function": name, "best_vals": best_vals, "best_xs": best_xs})
     
-    # Update personal bests
-    better = obj < pbest_obj
-    pbest[:, better] = X[:, better]
-    pbest_obj[better] = obj[better]
-    
-    # Update global best
-    if obj.min() < gbest_obj:
-        gbest = X[:, obj.argmin()]
-        gbest_obj = obj.min()
+    if len(valid_vals) > 0:
+        print(f"{name}: mean={meanv:.6g}, std={stdv:.6g}, best={np.nanmin(best_vals):.6g}")
+    else:
+        print(f"{name}: All runs failed - no valid results")
 
-# Set up plot
-fig, ax = plt.subplots(figsize=(10, 8))
-fig.set_tight_layout(True)
+df = pd.DataFrame(summary_rows)
+display(df)
 
-# Plot heatmap of function values
-img = ax.imshow(z, extent=[x_min_range, x_max_range, y_min_range, y_max_range], 
-               origin='lower', cmap='viridis', alpha=0.5)
-fig.colorbar(img, ax=ax)
+# Per-run results
+rows = []
+for r in all_results:
+    row = {"function": r["function"]}
+    for i, val in enumerate(r["best_vals"], start=1):
+        if not np.isnan(val):
+            row[f"run_{i}"] = float(np.round(val, 8))
+        else:
+            row[f"run_{i}"] = np.nan
+    rows.append(row)
 
-# Mark approximate global minimum
-ax.plot([x_min], [y_min], marker='x', markersize=5, color="white", label='Grid Minimum')
+df_runs = pd.DataFrame(rows)
+display(df_runs)
 
-# Contour lines
-contours = ax.contour(x, y, z, 10, colors='black', alpha=0.4)
-ax.clabel(contours, inline=True, fontsize=8, fmt="%.0f")
-
-# Particle visuals
-pbest_plot = ax.scatter(pbest[0], pbest[1], marker='o', color='black', alpha=0.5, label='PBest')
-p_plot = ax.scatter(X[0], X[1], marker='o', color='blue', alpha=0.5, label='Particles')
-p_arrow = ax.quiver(X[0], X[1], V[0], V[1], color='blue', width=0.005, angles='xy', scale_units='xy', scale=1)
-gbest_plot = ax.scatter([gbest[0]], [gbest[1]], marker='*', s=100, color='red', alpha=0.8, label='GBest')
-
-# Set axes and title
-ax.set_xlim([x_min_range, x_max_range])
-ax.set_ylim([y_min_range, y_max_range])
-ax.legend(loc='upper right')
-
-function_names = {
-    1: "Simple Quadratic Function",
-    2: "Rastrigin Function",
-    3: "Ackley Function", 
-    4: "Himmelblau Function"
-}
-ax.set_title(f"PSO Optimization for {function_names[function_number]}")
-ax.set_xlabel("x")
-ax.set_ylabel("y")
-
-def animate(i):
-    """Animation frame update"""
-    update()
-    ax.set_title(f'Iteration {i:02d} - {function_names[function_number]}')
-    pbest_plot.set_offsets(pbest.T)
-    p_plot.set_offsets(X.T)
-    p_arrow.set_offsets(X.T)
-    p_arrow.set_UVC(V[0], V[1])
-    gbest_plot.set_offsets(gbest.reshape(1, -1))
-    return ax, pbest_plot, p_plot, p_arrow, gbest_plot
-
-# Number of iterations
-max_iterations = 100
-
-# Create animation
-anim = FuncAnimation(fig, animate, frames=list(range(1, max_iterations+1)), 
-                     interval=200, blit=False, repeat=True)
-
-# Save animation
-function_name_simple = function_names[function_number].replace(" ", "_").lower()
-filename = f"PSO_{function_name_simple}.gif"
-anim.save(filename, dpi=120, writer="pillow")
-
-# Print optimization results
-print("\nOptimization Results:")
-print(f"Function: {function_names[function_number]}")
-print("-----------------------------")
-print(f"PSO found best at f({gbest[0]:.6f}, {gbest[1]:.6f}) = {gbest_obj:.6f}")
-
-# Known global minima
-if function_number == 2:
-    print("Exact Rastrigin minimum at f(0, 0) = 0")
-elif function_number == 3:
-    print("Exact Ackley minimum at f(0, 0) = 0")
-elif function_number == 4:
-    minima = [
-        (3.0, 2.0),
-        (-2.805118, 3.131312),
-        (-3.779310, -3.283186),
-        (3.584428, -1.848126)
-    ]
-    print("Known global minima for Himmelblau:")
-    for i, (x, y) in enumerate(minima):
-        print(f"  {i+1}. f({x:.6f}, {y:.6f}) = {f(x, y):.6f}")
+# Save summary CSV
+csv_path = "pso_benchmark_results_summary.csv"
+df.to_csv(csv_path, index=False)
+print("Saved summary CSV to:", csv_path)
