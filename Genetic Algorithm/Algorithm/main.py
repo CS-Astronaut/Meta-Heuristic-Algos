@@ -135,6 +135,6 @@ df_runs = pd.DataFrame(rows)
 display(df_runs)
 
 # Save summary CSV
-csv_path = "/mnt/data/ga_benchmark_results_summary_vectorized.csv"
+csv_path = "ga_benchmark_results_summary_vectorized.csv"
 df.to_csv(csv_path, index=False)
 print("Saved summary CSV to:", csv_path)
