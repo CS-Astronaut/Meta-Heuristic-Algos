@@ -1,3 +1,3 @@
-#(Genetic Algorithm 🧬) GA
+# (Genetic Algorithm 🧬) GA
 
 Genetic algorithms (GAs) are optimization methods inspired by natural selection. They work by evolving a population of candidate solutions through selection, crossover, and mutation to find near-optimal results. GAs are effective for solving complex and nonlinear problems across fields like engineering, machine learning, and bioinformatics. Despite challenges such as tuning parameters and avoiding premature convergence, their adaptability and wide applicability make them a valuable tool for modern problem-solving.
